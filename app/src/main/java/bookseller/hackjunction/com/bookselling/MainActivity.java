@@ -1,7 +1,11 @@
 package bookseller.hackjunction.com.bookselling;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -10,41 +14,65 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
+
+import java.io.IOException;
+
+import okhttp3.FormBody;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
+import static junit.framework.Assert.assertTrue;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    Context cont;
+    Spinner spinner_subject;
+    Spinner spinner_state;
+    Spinner spinner_condition;
+    OkHttpClient client;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        Intent i = new Intent(this, searchActivity.class);
-       // startActivity(i);
+        cont = this;
+        client = new OkHttpClient();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        Spinner spinner_state = (Spinner) findViewById(R.id.spinner_state);
+
+        AsyncTask k = new LongOperation();
+        k.execute();
+
+
+
+        spinner_state = (Spinner) findViewById(R.id.spinner_state);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.states, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_state.setAdapter(adapter);
 
-        Spinner spinner_subject = (Spinner) findViewById(R.id.spinner_subject);
+        spinner_subject = (Spinner) findViewById(R.id.spinner_subject);
         ArrayAdapter<CharSequence> adapter1 = ArrayAdapter.createFromResource(this,
                 R.array.subjects, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_subject.setAdapter(adapter1);
 
-        Spinner spinner_condition = (Spinner) findViewById(R.id.spinner_condition);
+        spinner_condition = (Spinner) findViewById(R.id.spinner_condition);
         ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this,
                 R.array.condition, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner_condition.setAdapter(adapter2);
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -54,7 +82,30 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        Button b = findViewById(R.id.button_search);
+
+        b.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String t = String.valueOf(spinner_subject.getSelectedItem());
+                Intent i = new Intent(cont, searchActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("subject", t);
+
+                t = String.valueOf(spinner_condition.getSelectedItem());
+                bundle.putString("condition", t);
+
+                t = String.valueOf(spinner_state.getSelectedItem());
+                bundle.putString("state", t);
+
+
+                i.putExtras(bundle);
+                startActivity(i);
+            }
+        });
     }
+
 
     @Override
     public void onBackPressed() {
@@ -107,5 +158,48 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    } private class LongOperation extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            final OkHttpClient client = new OkHttpClient();
+            RequestBody formBody = new FormBody.Builder()
+                    .add("username", "homo")
+                    .add("password", "homo").add("action", "login").build();
+
+            Request request = new Request.Builder().url("http://192.168.100.50/kommunisti/login.php")
+                    .post(formBody)
+                    .build();
+
+            Response response = null;
+            try {
+                response = client.newCall(request).execute();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            assertTrue(response.isSuccessful());
+            try {
+                return response.body().string().toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return "K";
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(cont);
+            SharedPreferences.Editor j = prefs.edit();
+            j.putString("token", result);
+            j.commit();
+        }
+
+        @Override
+        protected void onPreExecute() {}
+
+        @Override
+        protected void onProgressUpdate(Void... values) {}
     }
+
 }

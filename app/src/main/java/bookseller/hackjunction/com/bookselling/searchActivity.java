@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 
 import java.util.ArrayList;
 
@@ -25,10 +26,12 @@ public class searchActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         Bundle bundle = getIntent().getExtras();
-//        String location = bundle.getString("location");
+        String state = bundle.getString("state");
+        String condition = bundle.getString("condition");
+        String sunject = bundle.getString("subject");
 
         setContentView(R.layout.search_activity);
-
+        ImageView f = findViewById(R.id.imageView3);
         mRecyclerView = (RecyclerView) findViewById(R.id.my_recycler_view);
         mRecyclerView.setHasFixedSize(true);
         mLayoutManager = new LinearLayoutManager(this);
