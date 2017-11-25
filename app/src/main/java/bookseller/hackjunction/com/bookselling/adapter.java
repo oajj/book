@@ -64,6 +64,7 @@ public class adapter extends RecyclerView
     public void onBindViewHolder(DataObjectHolder holder, int position) {
         holder.label.setText(mDataset.get(position).getName());
         holder.dateTime.setText(mDataset.get(position).getState());
+
     }
 
     public void addItem(book dataObj, int index) {

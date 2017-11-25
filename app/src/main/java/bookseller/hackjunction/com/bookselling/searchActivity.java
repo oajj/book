@@ -57,8 +57,10 @@ public class searchActivity extends AppCompatActivity {
     private ArrayList<book> getDataSet() {
         ArrayList results = new ArrayList<book>();
         for (int index = 0; index < 20; index++) {
+
             book obj = new book("The name of the book " + index, "Condition:  " + index);
             results.add(index, obj);
+
         }
         return results;
     }
