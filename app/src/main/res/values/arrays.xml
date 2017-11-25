@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="states">
+        <item>Any</item>
+        <item>Tampere</item>
+        <item>Helsinki</item>
+        <item>Vantaa</item>
+        <item>Oulu</item>
+        <item>Lempäälä</item>
+    </string-array>
+
+    <string-array name="subjects">
+        <item>Any</item>
+        <item>Chemistry</item>
+        <item>PE</item>
+        <item>Physics</item>
+        <item>Heath education</item>
+        <item>Finnish</item>
+    </string-array>
+
+    <string-array name="condition">
+        <item>Any</item>
+        <item>New</item>
+        <item>Like new</item>
+        <item>Good</item>
+        <item>Ok</item>
+        <item>Bad</item>
+    </string-array>
+
+
+
+</resources>
