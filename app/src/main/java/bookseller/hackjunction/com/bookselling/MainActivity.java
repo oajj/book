@@ -51,8 +51,7 @@ public class MainActivity extends AppCompatActivity
         setSupportActionBar(toolbar);
 
 
-        AsyncTask k = new LongOperation();
-        k.execute();
+        AsyncTask k = new LongOperation().execute();
 
 
 
@@ -146,7 +145,8 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.nav_camera) {
-            // Handle the camera action
+            Intent i = new Intent(cont, sell.class);
+            startActivity(i);
         } else if (id == R.id.nav_gallery) {
 
         }   else if (id == R.id.nav_share) {
