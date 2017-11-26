@@ -37,9 +37,12 @@ public class book {
         this.condition = condition;
     }
 
-    book (String text1, String text2){
-        name = text1;
-        state = text2;
+    book (String name1, String state1, String condition1, String subject1, String price1){
+        price = price1;
+        name = name1;
+        state = state1;
+        condition = condition1;
+        subject = subject1;
     }
 
     public String getName() {

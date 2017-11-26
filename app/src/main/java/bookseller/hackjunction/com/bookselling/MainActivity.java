@@ -158,7 +158,8 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    } private class LongOperation extends AsyncTask<String, Void, String> {
+    }
+    private class LongOperation extends AsyncTask<String, Void, String> {
 
         @Override
         protected String doInBackground(String... params) {

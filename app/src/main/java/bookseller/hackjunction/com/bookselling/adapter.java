@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -23,14 +24,16 @@ public class adapter extends RecyclerView
     public static class DataObjectHolder extends RecyclerView.ViewHolder
             implements View
             .OnClickListener {
-        TextView label;
-        TextView dateTime;
+        TextView name,condition,location,price;
+        Button purchase;
 
         public DataObjectHolder(View itemView) {
             super(itemView);
-            label = (TextView) itemView.findViewById(R.id.textView4);
-            dateTime = (TextView) itemView.findViewById(R.id.textView5);
-
+            purchase= itemView.findViewById(R.id.purchase);
+            name = (TextView) itemView.findViewById(R.id.textView4);
+            condition = (TextView) itemView.findViewById(R.id.textView5);
+            location= itemView.findViewById(R.id.textView_location);
+            price = itemView.findViewById(R.id.price);
 
             Log.i(LOG_TAG, "Adding Listener");
             itemView.setOnClickListener(this);
@@ -62,18 +65,33 @@ public class adapter extends RecyclerView
 
     @Override
     public void onBindViewHolder(DataObjectHolder holder, int position) {
-        holder.label.setText(mDataset.get(position).getName());
-        holder.dateTime.setText(mDataset.get(position).getState());
-
+        holder.name.setText(mDataset.get(position).getName());
+        final int po1= position;
+        holder.condition.setText(mDataset.get(position).getCondition());
+        holder.price.setText(mDataset.get(position).getPrice()+" e");
+        holder.location.setText(mDataset.get(position).getState());
+        holder.purchase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                click(po1);
+            }
+        });
     }
 
     public void addItem(book dataObj, int index) {
         mDataset.add(dataObj);
         notifyItemInserted(index);
     }
+    public void click(int position){
+        
+    }
 
     public void deleteItem(int index) {
         mDataset.remove(index);
+        notifyItemRemoved(index);
+    }
+    public void deleteAll(int index) {
+        mDataset.clear();
         notifyItemRemoved(index);
     }
 
